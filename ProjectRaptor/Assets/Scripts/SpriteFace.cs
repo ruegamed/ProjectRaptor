@@ -9,8 +9,10 @@ public class SpriteFace : MonoBehaviour
 	private Camera mainCamera;
 	private BoxCollider selectionCollider;
 	private GameObject parent;
-	private UnitScript unitScript;
 	private SpriteRenderer spriteRenderer;
+	private NavMeshAgent navMeshAgent;
+
+	private Vector3 facingDirection;
 
 	private const float lockX = 0;
 	private const float lockZ = 0;
@@ -20,8 +22,10 @@ public class SpriteFace : MonoBehaviour
 		mainCamera = Camera.main;
 		parent = gameObject.transform.parent.gameObject;
 		selectionCollider = parent.GetComponent<BoxCollider>();
-		unitScript = parent.GetComponent<UnitScript>();
 		spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+		navMeshAgent = gameObject.transform.parent.gameObject.GetComponent<NavMeshAgent>();
+
+		facingDirection = navMeshAgent.nextPosition;
 	}
 
 	void Update() 
@@ -46,6 +50,8 @@ public class SpriteFace : MonoBehaviour
 	private void faceSprite()
 	{
 		float directionNumber;
+
+		setFacingDirection();
 
 		directionNumber = calculateYDifference();
 
@@ -89,7 +95,7 @@ public class SpriteFace : MonoBehaviour
 		float yCamera;
 		float yDifference;
 
-		yUnitFacingDirection = unitScript.facingDirection.y;
+		yUnitFacingDirection = facingDirection.y;
 		yCamera = gameObject.transform.eulerAngles.y;
 
 		if(yUnitFacingDirection > yCamera)
@@ -104,5 +110,17 @@ public class SpriteFace : MonoBehaviour
 		//Debug.Log(yDifference);
 
 		return yDifference;
+	}
+
+	private void setFacingDirection()
+	{
+		NavMeshPath nmp;
+
+		nmp = navMeshAgent.path;
+
+		if(navMeshAgent.desiredVelocity != Vector3.zero)
+		{
+			facingDirection = Quaternion.LookRotation(nmp.corners[nmp.corners.Length-1] - gameObject.transform.position).eulerAngles;
+		}
 	}
 }
