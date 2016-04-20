@@ -24,6 +24,9 @@ public class UnitScript : MonoBehaviour
 
 		nmp = navMeshAgent.path;
 
-		facingDirection = Quaternion.LookRotation(nmp.corners[nmp.corners.Length-1] - gameObject.transform.position).eulerAngles;
+		if(navMeshAgent.desiredVelocity != Vector3.zero)
+		{
+			facingDirection = Quaternion.LookRotation(nmp.corners[nmp.corners.Length-1] - gameObject.transform.position).eulerAngles;
+		}
 	}
 }
