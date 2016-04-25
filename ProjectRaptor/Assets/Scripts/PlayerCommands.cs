@@ -17,24 +17,12 @@ public class PlayerCommands : MonoBehaviour
 	{
 		if(Input.GetMouseButtonUp(0))
 		{
-			selectionGroup.Clear();
-			selectionGroupAgents.Clear();
+			clearSelectionGroup();
 		}
 
 		if(Input.GetMouseButtonUp(1))
 		{
-			Ray mousePosition;
-			RaycastHit movePoint;
-
-			mousePosition = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-			if(Physics.Raycast(mousePosition, out movePoint))
-			{
-				for(int x = 0; x != selectionGroupAgents.Count; x++)
-				{
-					selectionGroupAgents[x].destination = movePoint.point;
-				}
-			}
+			moveCommand();
 		}
 	}
 
@@ -42,5 +30,27 @@ public class PlayerCommands : MonoBehaviour
 	{
 		selectionGroup.Add(newUnit);
 		selectionGroupAgents.Add(newUnit.GetComponent<NavMeshAgent>());
+	}
+
+	private void clearSelectionGroup()
+	{
+		selectionGroup.Clear();
+		selectionGroupAgents.Clear();
+	}
+
+	private void moveCommand()
+	{
+		Ray mousePosition;
+		RaycastHit movePoint;
+
+		mousePosition = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+		if(Physics.Raycast(mousePosition, out movePoint))
+		{
+			for(int x = 0; x != selectionGroupAgents.Count; x++)
+			{
+				selectionGroupAgents[x].destination = movePoint.point;
+			}
+		}
 	}
 }
