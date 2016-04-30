@@ -58,7 +58,6 @@ public class PlayerCommands : MonoBehaviour
 
 			for(int x = 0; x != selectionGroupAgents.Count; x++)
 			{
-				//Debug.Log(movePositions[x]);
 				selectionGroupAgents[x].destination = movePositions[x];
 			}
 		}
